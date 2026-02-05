@@ -1,6 +1,7 @@
 package br.com.rangobox.pagamentos.service;
 
 import br.com.rangobox.pagamentos.dto.PagamentoDTO;
+import br.com.rangobox.pagamentos.http.PedidoClient;
 import br.com.rangobox.pagamentos.model.Pagamento;
 import br.com.rangobox.pagamentos.model.Status;
 import br.com.rangobox.pagamentos.repository.PagamentoRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +25,8 @@ public class PagamentoService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PedidoClient pedido;
 
     public Page<PagamentoDTO> obterTodos(Pageable paginacao){
          return repository
@@ -54,6 +58,18 @@ public class PagamentoService {
 
     public void excluirPagamento(Long id) {
         repository.deleteById(id);
+    }
+
+    public void confirmarPagamento(Long id){
+        Optional<Pagamento> pagamento = repository.findById(id);
+
+        if (!pagamento.isPresent()) {
+            throw new EntityNotFoundException();
+        }
+
+        pagamento.get().setStatus(Status.CONFIRMADO);
+        repository.save(pagamento.get());
+        pedido.atualizaPagamento(pagamento.get().getPedidoId());
     }
 
 }
