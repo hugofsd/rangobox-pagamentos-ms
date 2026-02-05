@@ -3,5 +3,6 @@ package br.com.rangobox.pagamentos.model;
 public enum Status {
     CRIADO,
     CONFIRMADO,
-    CANCELADO;
+    CANCELADO,
+    CONFIRMADO_SEM_INTEGRACAO;
 }
