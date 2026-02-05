@@ -1,10 +1,12 @@
 package br.com.rangobox.pagamentos.dto;
 
+import br.com.rangobox.pagamentos.model.ItemDoPedido;
 import br.com.rangobox.pagamentos.model.Status;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,4 +29,7 @@ public class PagamentoDTO {
     private Long formaDePagamentoId;
 
     private Long pedidoId;
+
+    private List<ItemDoPedido> itens;
+    
 }
